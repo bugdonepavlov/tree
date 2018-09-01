@@ -22,11 +22,17 @@ class Node extends React.PureComponent {
     return null;
   }
 
+  handleFocus(e) {
+    e.target.setSelectionRange(0, e.target.value.length);
+  }
+
   handleChange = (e) => {
     this.setState({
       valid: false,
       validMessages: null,
       title: e.target.value,
+    }, () => {
+      this.validate(this.state.title);
     });
   }
 
@@ -46,7 +52,7 @@ class Node extends React.PureComponent {
       });
     }
 
-    if (val.length < 1 && val.length > 255) {
+    if (val.length < 1 || val.length > 255) {
       return this.setState({
         valid: true,
         validMessages: 'Неее, нужно что было от 1 до 255 максимум символов',
@@ -67,16 +73,21 @@ class Node extends React.PureComponent {
 
     const {
       title,
+      prevTitle,
       valid,
     } = this.state;
 
-    if (e.key === 'Enter' || e.key === 'Escape' || e.type === 'blur') {
-      this.validate(title);
-
-      if (valid) {
-        e.target.blur();
-        editAction(title, item._id);
-      }
+    if (
+      title !== prevTitle
+      && !valid
+      && (
+        e.key === 'Enter'
+        || e.key === 'Escape'
+        || e.type === 'blur'
+      )
+    ) {
+      e.target.blur();
+      editAction(title, item._id);
     }
   }
 
@@ -102,11 +113,10 @@ class Node extends React.PureComponent {
                   <input
                     className={valid ? 'error-input' : ''}
                     onKeyUp={this.handleSubmit}
-                    onBlur={this.handleSubmit}
-                    name={`item${item._id}`}
                     onChange={this.handleChange}
+                    onFocus={this.handleFocus}
                     value={this.state.title}
-
+                    name={`item${item._id}`}
                   />
                   {valid && <div className="error">{validMessages}</div>}
                 </div>
