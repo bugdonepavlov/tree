@@ -2,7 +2,7 @@
   "name": "ylab",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://bugdonepavlov.github.io/react-tree",
+  "homepage": "http://bugdonepavlov.github.io/tree",
   "dependencies": {
     "array-to-tree": "^3.3.0",
     "autoprefixer": "7.1.6",
